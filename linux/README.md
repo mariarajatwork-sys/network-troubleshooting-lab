@@ -1,6 +1,6 @@
 # Linux Networking Troubleshooting Lab
 
-This section contains hands-on Linux networking troubleshooting scenarios, commands, and practical notes.
+This lab contains hands-on Linux networking troubleshooting scenarios, commands, and practical exercises.
 
 ## Topics
 
@@ -12,3 +12,38 @@ This section contains hands-on Linux networking troubleshooting scenarios, comma
 - Connectivity testing
 - Network troubleshooting commands
 - Common Linux networking issues
+
+---
+
+## 1. Network Interfaces
+
+### Check Network Interfaces
+
+```bash
+ip addr
+```
+
+### Check Interface Status
+
+```bash
+ip link
+```
+
+### Check IP Address in Brief
+
+```bash
+ip -br addr
+```
+
+### Check a Specific Interface
+
+```bash
+ip addr show eth0
+```
+
+### Check Interface Statistics
+
+```bash
+ip -s link
+```
+
