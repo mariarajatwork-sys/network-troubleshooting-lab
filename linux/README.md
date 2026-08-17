@@ -1,4 +1,4 @@
-# Linux Networking Troubleshooting Lab
+<img width="1487" height="947" alt="image" src="https://github.com/user-attachments/assets/068f8e58-848a-4333-a349-ed0d714f2917" /># Linux Networking Troubleshooting Lab
 
 This lab contains hands-on Linux networking troubleshooting scenarios, commands, and practical exercises.
 
@@ -46,4 +46,31 @@ ip addr show eth0
 ```bash
 ip -s link
 ```
+## 2. IP Configuration
+
+### Check IP Address
+
+```bash
+ip addr
+```
+
+### Add an IP Address
+
+```bash
+sudo ip addr add 192.168.1.100/24 dev eth0
+```
+
+### Remove IP Address
+
+```bash
+sudo ip addr del 192.168.1.100/24 dev eth0
+```
+
+### Change IP Address
+
+```bash
+sudo ip addr replace 192.168.1.100/24 dev eth0
+```
+
+
 
