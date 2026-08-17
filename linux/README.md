@@ -1,4 +1,4 @@
-<img width="1487" height="947" alt="image" src="https://github.com/user-attachments/assets/068f8e58-848a-4333-a349-ed0d714f2917" /># Linux Networking Troubleshooting Lab
+# Linux Networking Troubleshooting Lab
 
 This lab contains hands-on Linux networking troubleshooting scenarios, commands, and practical exercises.
 
