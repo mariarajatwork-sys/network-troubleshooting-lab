@@ -1957,3 +1957,1381 @@ Document the Resolution
 Effective network troubleshooting should be systematic and evidence-based.
 
 The goal is to identify the **root cause** instead of repeatedly applying changes without understanding the problem.
+
+---
+
+## 13. Network Troubleshooting Checklist & Quick Reference
+
+This section provides a quick checklist for troubleshooting common Linux network issues.
+
+### 13.1 Network Interface Checklist
+
+Check network interfaces:
+
+```bash
+ip link
+```
+
+Check interface state and IP address:
+
+```bash
+ip addr
+```
+
+Check interface statistics:
+
+```bash
+ip -s link
+```
+
+Look for:
+
+- Interface DOWN
+- Missing IP address
+- RX errors
+- TX errors
+- Dropped packets
+- Packet loss
+
+---
+
+### 13.2 IP Configuration Checklist
+
+Check IP addresses:
+
+```bash
+ip addr show
+```
+
+Check the subnet configuration:
+
+```bash
+ip addr
+```
+
+Check the default gateway:
+
+```bash
+ip route show default
+```
+
+Verify that the IP address and subnet match the expected network configuration.
+
+---
+
+### 13.3 Routing Checklist
+
+Display the routing table:
+
+```bash
+ip route
+```
+
+Check the default route:
+
+```bash
+ip route show default
+```
+
+Test the route to a destination:
+
+```bash
+ip route get 8.8.8.8
+```
+
+Look for:
+
+- Missing default route
+- Incorrect gateway
+- Incorrect interface
+- Unexpected routes
+- Routing conflicts
+
+---
+
+### 13.4 DNS Checklist
+
+Check DNS configuration:
+
+```bash
+cat /etc/resolv.conf
+```
+
+Test hostname resolution:
+
+```bash
+nslookup google.com
+```
+
+Use `dig` for detailed DNS information:
+
+```bash
+dig google.com
+```
+
+Test DNS using the configured resolver:
+
+```bash
+getent hosts google.com
+```
+
+Look for:
+
+- Incorrect DNS server
+- DNS server unreachable
+- DNS timeout
+- DNS resolution failure
+- Incorrect DNS configuration
+
+---
+
+### 13.5 Connectivity Checklist
+
+Test the local gateway:
+
+```bash
+ping -c 4 <gateway-ip>
+```
+
+Test external IP connectivity:
+
+```bash
+ping -c 4 8.8.8.8
+```
+
+Test hostname connectivity:
+
+```bash
+ping -c 4 google.com
+```
+
+Test the network path:
+
+```bash
+traceroute google.com
+```
+
+---
+
+### 13.6 Port Connectivity Checklist
+
+Check listening ports:
+
+```bash
+ss -ltnp
+```
+
+Check a specific port:
+
+```bash
+ss -ltnp | grep :443
+```
+
+Test remote port connectivity:
+
+```bash
+nc -zv <server-ip> <port>
+```
+
+Test HTTP connectivity:
+
+```bash
+curl -I http://<server-ip>
+```
+
+Look for:
+
+- Port not listening
+- Service stopped
+- Firewall blocking traffic
+- Incorrect port
+- Service bound to localhost
+
+---
+
+### 13.7 Firewall Checklist
+
+Check UFW status:
+
+```bash
+sudo ufw status
+```
+
+Check iptables rules:
+
+```bash
+sudo iptables -L -n -v
+```
+
+Check nftables rules:
+
+```bash
+sudo nft list ruleset
+```
+
+Look for:
+
+- DROP rules
+- REJECT rules
+- Blocked ports
+- Incorrect firewall configuration
+
+---
+
+### 13.8 Service Checklist
+
+Check service status:
+
+```bash
+systemctl status <service-name>
+```
+
+Check whether a service is enabled:
+
+```bash
+systemctl is-enabled <service-name>
+```
+
+Check recent service logs:
+
+```bash
+journalctl -u <service-name> --since "10 minutes ago"
+```
+
+Look for:
+
+- Service stopped
+- Service failed
+- Configuration errors
+- Permission errors
+- Dependency failures
+
+---
+
+### 13.9 Network Traffic Checklist
+
+Capture network traffic:
+
+```bash
+sudo tcpdump -i any
+```
+
+Capture traffic for a specific host:
+
+```bash
+sudo tcpdump -i any host <server-ip>
+```
+
+Capture traffic for a specific port:
+
+```bash
+sudo tcpdump -i any port 443
+```
+
+Look for:
+
+- TCP SYN packets
+- SYN-ACK responses
+- Retransmissions
+- Connection resets
+- ICMP errors
+- Missing responses
+
+---
+
+### 13.10 ARP / Neighbor Checklist
+
+Display the neighbor table:
+
+```bash
+ip neigh show
+```
+
+Check whether the gateway has been resolved:
+
+```bash
+ip neigh show <gateway-ip>
+```
+
+Look for:
+
+- FAILED
+- INCOMPLETE
+- STALE
+- Missing neighbor entry
+
+---
+
+### 13.11 Performance Checklist
+
+Check network interface statistics:
+
+```bash
+ip -s link
+```
+
+Check network activity:
+
+```bash
+sar -n DEV 1 5
+```
+
+Check active connections:
+
+```bash
+ss -s
+```
+
+Test latency:
+
+```bash
+ping -c 10 <server-ip>
+```
+
+Look for:
+
+- High latency
+- Packet loss
+- Interface errors
+- Dropped packets
+- High network utilization
+
+---
+
+### 13.12 Quick Troubleshooting Flow
+
+```text
+1. Identify the Problem
+        ↓
+2. Check Network Interface
+        ↓
+3. Check IP Address
+        ↓
+4. Check Default Gateway
+        ↓
+5. Check Routing
+        ↓
+6. Check DNS
+        ↓
+7. Test Connectivity
+        ↓
+8. Check Ports
+        ↓
+9. Check Firewall
+        ↓
+10. Check Service
+        ↓
+11. Check Logs
+        ↓
+12. Capture Traffic if Required
+        ↓
+13. Identify Root Cause
+        ↓
+14. Apply Fix
+        ↓
+15. Verify the Fix
+        ↓
+16. Document the Resolution
+```
+
+### Quick Command Reference
+
+| Purpose | Command |
+|---|---|
+| Show interfaces | `ip link` |
+| Show IP address | `ip addr` |
+| Show routes | `ip route` |
+| Show default route | `ip route show default` |
+| Test connectivity | `ping` |
+| Trace network path | `traceroute` |
+| DNS lookup | `nslookup` |
+| Detailed DNS lookup | `dig` |
+| Show listening ports | `ss -ltnp` |
+| Test port | `nc -zv` |
+| Show neighbor table | `ip neigh` |
+| Check firewall | `sudo ufw status` |
+| Check service | `systemctl status` |
+| View logs | `journalctl` |
+| Capture traffic | `tcpdump` |
+| Check interface errors | `ip -s link` |
+
+### Key Takeaway
+
+A structured troubleshooting checklist helps reduce investigation time and prevents important checks from being missed.
+
+Always collect evidence, identify the root cause, apply the appropriate fix, verify the result, and document the resolution.
+
+---
+
+---
+
+## 14. Network Security Troubleshooting
+
+This section covers basic Linux network security checks used to identify firewall, port, access, and connection-related problems.
+
+### 14.1 Check Firewall Status
+
+Check UFW status:
+
+```bash
+sudo ufw status
+```
+
+Check detailed UFW rules:
+
+```bash
+sudo ufw status verbose
+```
+
+Check iptables rules:
+
+```bash
+sudo iptables -L -n -v
+```
+
+Check nftables rules:
+
+```bash
+sudo nft list ruleset
+```
+
+Look for:
+
+- DROP rules
+- REJECT rules
+- Blocked ports
+- Unexpected firewall rules
+- Incorrect source or destination restrictions
+
+---
+
+### 14.2 Check Listening Services
+
+Display listening TCP and UDP ports:
+
+```bash
+ss -lntup
+```
+
+Check a specific port:
+
+```bash
+ss -lntup | grep :443
+```
+
+Identify the process using a port:
+
+```bash
+sudo lsof -i :443
+```
+
+Look for:
+
+- Unexpected open ports
+- Required service not listening
+- Service listening on the wrong address
+- Unnecessary services exposed to the network
+
+---
+
+### 14.3 Check Listening Address
+
+Check where a service is listening:
+
+```bash
+ss -lntp
+```
+
+Example:
+
+```text
+127.0.0.1:8080
+```
+
+The service is listening only on localhost.
+
+Example:
+
+```text
+0.0.0.0:8080
+```
+
+The service is listening on all IPv4 interfaces.
+
+Look for:
+
+- Service bound only to localhost
+- Incorrect IP address
+- Incorrect port
+- Unexpected public exposure
+
+---
+
+### 14.4 Test Port Access
+
+Test whether a remote port is reachable:
+
+```bash
+nc -zv <server-ip> <port>
+```
+
+Example:
+
+```bash
+nc -zv 192.168.1.10 443
+```
+
+Test HTTP:
+
+```bash
+curl -I http://<server-ip>:<port>
+```
+
+Test HTTPS:
+
+```bash
+curl -I https://<server-ip>:<port>
+```
+
+Possible results:
+
+```text
+Connection succeeded
+```
+
+or:
+
+```text
+Connection refused
+```
+
+or:
+
+```text
+Connection timed out
+```
+
+These results can help determine whether the problem is related to the service, firewall, or network path.
+
+---
+
+### 14.5 Check SSH Connectivity
+
+Test SSH connectivity:
+
+```bash
+ssh <user>@<server-ip>
+```
+
+Check whether SSH is listening:
+
+```bash
+ss -lntp | grep :22
+```
+
+Check SSH service:
+
+```bash
+systemctl status ssh
+```
+
+On some distributions:
+
+```bash
+systemctl status sshd
+```
+
+Check SSH logs:
+
+```bash
+journalctl -u ssh --since "10 minutes ago"
+```
+
+Look for:
+
+- SSH service stopped
+- Port 22 blocked
+- Authentication failures
+- Connection timeout
+- Firewall restrictions
+
+---
+
+### 14.6 Check Firewall Rules for a Specific Port
+
+Search iptables rules:
+
+```bash
+sudo iptables -L INPUT -n -v | grep 443
+```
+
+Check UFW rules:
+
+```bash
+sudo ufw status numbered
+```
+
+Verify whether the required port is allowed.
+
+Example:
+
+```text
+443/tcp ALLOW
+```
+
+If the required port is blocked, investigate the firewall rule before making changes.
+
+---
+
+### 14.7 Check Active Connections
+
+Display active TCP connections:
+
+```bash
+ss -tan
+```
+
+Display established connections:
+
+```bash
+ss -tan state established
+```
+
+Display connection summary:
+
+```bash
+ss -s
+```
+
+Look for:
+
+- Large number of connections
+- Unexpected remote addresses
+- Large number of TIME-WAIT connections
+- Large number of SYN-RECV connections
+- Connection spikes
+
+---
+
+### 14.8 Check Network Traffic
+
+Capture traffic with tcpdump:
+
+```bash
+sudo tcpdump -i any
+```
+
+Capture traffic from a specific host:
+
+```bash
+sudo tcpdump -i any host <server-ip>
+```
+
+Capture traffic on a specific port:
+
+```bash
+sudo tcpdump -i any port 443
+```
+
+Capture TCP traffic:
+
+```bash
+sudo tcpdump -i any tcp
+```
+
+Look for:
+
+- Unexpected traffic
+- Connection attempts
+- TCP retransmissions
+- TCP resets
+- ICMP errors
+- Missing responses
+
+---
+
+### 14.9 Check for Unexpected Open Ports
+
+List all listening ports:
+
+```bash
+sudo ss -lntup
+```
+
+Review each listening service and identify whether it is required.
+
+Example questions:
+
+```text
+What service is using this port?
+Is this service required?
+Who should be able to access it?
+Is the port exposed externally?
+Is the firewall allowing unnecessary access?
+```
+
+---
+
+### 14.10 Basic Network Security Troubleshooting Workflow
+
+```text
+Identify the Problem
+        ↓
+Check Listening Ports
+        ↓
+Check Service Status
+        ↓
+Check Firewall Rules
+        ↓
+Test Port Connectivity
+        ↓
+Check Active Connections
+        ↓
+Capture Network Traffic
+        ↓
+Identify the Root Cause
+        ↓
+Apply the Appropriate Fix
+        ↓
+Verify Connectivity
+        ↓
+Document the Resolution
+```
+
+### 14.11 Example Troubleshooting Scenario
+
+#### Problem
+
+A user cannot connect to an application running on port 443.
+
+#### Step 1: Check the Service
+
+```bash
+systemctl status <service-name>
+```
+
+#### Step 2: Check the Port
+
+```bash
+ss -lntp | grep :443
+```
+
+#### Step 3: Check Firewall
+
+```bash
+sudo ufw status
+```
+
+#### Step 4: Test Connectivity
+
+```bash
+nc -zv <server-ip> 443
+```
+
+#### Step 5: Check Traffic
+
+```bash
+sudo tcpdump -i any port 443
+```
+
+#### Possible Causes
+
+- Application is stopped
+- Port 443 is not listening
+- Firewall is blocking port 443
+- Service is listening only on localhost
+- Network path is unavailable
+
+#### Resolution
+
+Identify the exact failure point before making changes. After applying the fix, test the connection again.
+
+---
+
+### Key Takeaway
+
+Network security troubleshooting should focus on understanding **what is listening, who can access it, and what traffic is being allowed or blocked**.
+
+Avoid making unnecessary firewall changes. Always verify the existing configuration, identify the root cause, apply the minimum required change, and verify the result.
+
+---
+
+---
+
+## 15. Linux Network Troubleshooting by OSI Layer
+
+The OSI model provides a structured way to understand and troubleshoot network problems.
+
+Using the OSI model helps narrow down the possible root cause instead of checking everything randomly.
+
+### Layer 1 – Physical Layer
+
+The Physical Layer deals with the physical connection and network interface.
+
+#### Check interface status:
+
+```bash
+ip link
+```
+
+#### Check interface statistics:
+
+```bash
+ip -s link
+```
+
+#### If available, check Ethernet information:
+
+```bash
+sudo ethtool eth0
+```
+
+Check for:
+
+- Interface DOWN
+- Link not detected
+- RX errors
+- TX errors
+- Dropped packets
+- Speed or duplex problems
+
+---
+
+### Layer 2 – Data Link Layer
+
+The Data Link Layer deals with MAC addresses, Ethernet communication, and local network neighbors.
+
+#### Check MAC address:
+
+```bash
+ip link show
+```
+
+#### Check ARP / neighbor table:
+
+```bash
+ip neigh show
+```
+
+#### Test local gateway:
+
+```bash
+ping -c 4 <gateway-ip>
+```
+
+Check for:
+
+- Missing neighbor entries
+- FAILED neighbor state
+- Incorrect MAC information
+- Local network connectivity problems
+
+---
+
+### Layer 3 – Network Layer
+
+The Network Layer deals with IP addressing and routing.
+
+#### Check IP address:
+
+```bash
+ip addr
+```
+
+#### Check routing table:
+
+```bash
+ip route
+```
+
+#### Check default gateway:
+
+```bash
+ip route show default
+```
+
+#### Test route to a destination:
+
+```bash
+ip route get 8.8.8.8
+```
+
+Check for:
+
+- Incorrect IP address
+- Incorrect subnet
+- Missing default gateway
+- Incorrect routes
+- Unreachable destination
+
+---
+
+### Layer 4 – Transport Layer
+
+The Transport Layer deals mainly with TCP and UDP communication and ports.
+
+#### Check listening ports:
+
+```bash
+ss -lntup
+```
+
+#### Check active connections:
+
+```bash
+ss -tan
+```
+
+#### Test a remote TCP port:
+
+```bash
+nc -zv <server-ip> <port>
+```
+
+Example:
+
+```bash
+nc -zv 192.168.1.10 443
+```
+
+Check for:
+
+- Port not listening
+- Connection refused
+- Connection timeout
+- Firewall restrictions
+- Unexpected connections
+
+---
+
+### Layer 5 – Session Layer
+
+The Session Layer deals with maintaining communication sessions between systems and applications.
+
+For Linux troubleshooting, inspect active connections and service state.
+
+#### Check established connections:
+
+```bash
+ss -tan state established
+```
+
+#### Check service status:
+
+```bash
+systemctl status <service-name>
+```
+
+#### Check service logs:
+
+```bash
+journalctl -u <service-name> --since "10 minutes ago"
+```
+
+Check for:
+
+- Sessions being terminated
+- Service restarts
+- Connection failures
+- Authentication problems
+- Timeout issues
+
+---
+
+### Layer 6 – Presentation Layer
+
+The Presentation Layer deals with data formatting, encryption, and encoding.
+
+For network troubleshooting, HTTPS/TLS is a common example.
+
+#### Test HTTPS:
+
+```bash
+curl -I https://google.com
+```
+
+#### View detailed HTTPS connection information:
+
+```bash
+curl -v https://google.com
+```
+
+Check for:
+
+- TLS errors
+- Certificate problems
+- Protocol mismatches
+- Encryption-related failures
+
+---
+
+### Layer 7 – Application Layer
+
+The Application Layer includes network applications and protocols such as DNS, HTTP, SSH, and other services.
+
+#### Test DNS:
+
+```bash
+nslookup google.com
+```
+
+#### Detailed DNS query:
+
+```bash
+dig google.com
+```
+
+#### Test HTTP:
+
+```bash
+curl -I https://google.com
+```
+
+#### Test SSH:
+
+```bash
+ssh <user>@<server-ip>
+```
+
+#### Check application service:
+
+```bash
+systemctl status <service-name>
+```
+
+Check for:
+
+- DNS failures
+- HTTP errors
+- Application errors
+- Service failures
+- Authentication problems
+
+---
+
+## OSI Layer Troubleshooting Summary
+
+| OSI Layer | Main Area | Useful Commands |
+|---|---|---|
+| Layer 1 – Physical | Interface and link | `ip link`, `ethtool` |
+| Layer 2 – Data Link | MAC / ARP | `ip neigh`, `ip link` |
+| Layer 3 – Network | IP / Routing | `ip addr`, `ip route` |
+| Layer 4 – Transport | TCP / UDP / Ports | `ss`, `nc` |
+| Layer 5 – Session | Sessions / Services | `ss`, `systemctl`, `journalctl` |
+| Layer 6 – Presentation | TLS / Encryption | `curl -v` |
+| Layer 7 – Application | DNS / HTTP / SSH | `dig`, `nslookup`, `curl`, `ssh` |
+
+---
+
+## OSI-Based Troubleshooting Flow
+
+```text
+Network Problem
+      ↓
+Layer 1
+Physical / Interface
+      ↓
+Layer 2
+MAC / ARP / Local Network
+      ↓
+Layer 3
+IP / Routing
+      ↓
+Layer 4
+TCP / UDP / Ports
+      ↓
+Layer 5
+Sessions / Services
+      ↓
+Layer 6
+TLS / Encryption
+      ↓
+Layer 7
+DNS / HTTP / Application
+      ↓
+Root Cause
+      ↓
+Fix
+      ↓
+Verify
+```
+
+---
+
+## Practical Example
+
+### Problem
+
+A user cannot access an HTTPS application.
+
+### Step 1 – Layer 1
+
+Check the network interface:
+
+```bash
+ip link
+```
+
+### Step 2 – Layer 2
+
+Check the neighbor table:
+
+```bash
+ip neigh show
+```
+
+### Step 3 – Layer 3
+
+Check IP and routing:
+
+```bash
+ip addr
+ip route
+```
+
+Test connectivity:
+
+```bash
+ping -c 4 <server-ip>
+```
+
+### Step 4 – Layer 4
+
+Test port 443:
+
+```bash
+nc -zv <server-ip> 443
+```
+
+### Step 5 – Layer 5
+
+Check the application service:
+
+```bash
+systemctl status <service-name>
+```
+
+### Step 6 – Layer 6
+
+Check HTTPS/TLS:
+
+```bash
+curl -v https://<server-ip>
+```
+
+### Step 7 – Layer 7
+
+Check DNS:
+
+```bash
+nslookup <domain-name>
+dig <domain-name>
+```
+
+### Conclusion
+
+Troubleshooting from lower layers to higher layers helps identify the exact point where communication is failing.
+
+---
+
+## Key Takeaway
+
+The OSI model provides a structured troubleshooting approach:
+
+```text
+Physical
+   ↓
+Data Link
+   ↓
+Network
+   ↓
+Transport
+   ↓
+Session
+   ↓
+Presentation
+   ↓
+Application
+```
+
+Start with the simplest and lowest-level checks, then move upward until the failure is identified.
+
+---
+
+## 16. Linux Networking Lab Summary
+
+This lab provides practical experience with Linux networking, network troubleshooting, monitoring, and basic network security.
+
+### Topics Covered
+
+- Network Interfaces
+- IP Configuration
+- Routing
+- DNS Troubleshooting
+- Network Connectivity
+- TCP and UDP Ports
+- Network Troubleshooting Scenarios
+- Troubleshooting Workflow
+- Network Diagnostic Tools
+- Network Performance Troubleshooting
+- Practical Troubleshooting Case Studies
+- Troubleshooting Checklists
+- Network Security Troubleshooting
+- OSI Layer Based Troubleshooting
+
+---
+
+### Important Commands Learned
+
+```bash
+ip addr
+ip link
+ip route
+ip neigh
+ping
+traceroute
+tracepath
+nslookup
+dig
+ss
+nc
+curl
+tcpdump
+systemctl
+journalctl
+iptables
+ufw
+nft
+sar
+ethtool
+```
+
+---
+
+### Troubleshooting Approach
+
+The general approach used throughout this lab is:
+
+```text
+Identify the Problem
+        ↓
+Collect Information
+        ↓
+Check Interface
+        ↓
+Check IP Configuration
+        ↓
+Check Routing
+        ↓
+Check DNS
+        ↓
+Test Connectivity
+        ↓
+Check Ports
+        ↓
+Check Firewall
+        ↓
+Check Services
+        ↓
+Check Logs
+        ↓
+Capture Traffic if Required
+        ↓
+Identify Root Cause
+        ↓
+Apply Fix
+        ↓
+Verify the Fix
+        ↓
+Document the Resolution
+```
+
+---
+
+### Skills Demonstrated
+
+By completing this lab, the following practical skills are demonstrated:
+
+- Linux network configuration
+- IP addressing and subnet troubleshooting
+- Routing troubleshooting
+- DNS troubleshooting
+- TCP/UDP connectivity testing
+- Port troubleshooting
+- Network performance analysis
+- Packet capture and analysis
+- Firewall troubleshooting
+- Service and log analysis
+- OSI-based troubleshooting
+- Root cause analysis
+- Network incident troubleshooting
+
+---
+
+### Real-World NOC / Network Engineer Application
+
+The concepts and commands practiced in this lab can be applied to common NOC and Network Engineer activities such as:
+
+- Investigating network alerts
+- Troubleshooting server connectivity
+- Checking DNS failures
+- Investigating packet loss
+- Troubleshooting application ports
+- Checking firewall restrictions
+- Investigating high latency
+- Checking network interface errors
+- Validating service availability
+- Analyzing network traffic
+- Documenting incidents and resolutions
+
+---
+
+### Final Troubleshooting Checklist
+
+Before closing a network incident, verify:
+
+```text
+[ ] Network interface is UP
+[ ] IP address is correct
+[ ] Default gateway is available
+[ ] Routing table is correct
+[ ] DNS resolution works
+[ ] Network connectivity works
+[ ] Required port is reachable
+[ ] Firewall rules are correct
+[ ] Required service is running
+[ ] Logs show no related errors
+[ ] Network performance is acceptable
+[ ] Fix has been verified
+[ ] Incident has been documented
+```
+
+---
+
+## Conclusion
+
+This Linux Networking Lab was created to build practical troubleshooting skills using real Linux networking commands and structured troubleshooting methods.
+
+The lab focuses on understanding the problem, collecting evidence, identifying the root cause, applying the appropriate fix, verifying the result, and documenting the resolution.
+
+```text
+Monitor
+   ↓
+Detect
+   ↓
+Investigate
+   ↓
+Troubleshoot
+   ↓
+Identify Root Cause
+   ↓
+Resolve
+   ↓
+Verify
+   ↓
+Document
+```
+
+**Linux Networking Lab — Completed.** ✅
+
+---
